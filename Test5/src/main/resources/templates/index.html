@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+    <title>人员信息查询</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+        #show {
+            margin: 0 auto;
+            width: 300px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>人员信息查询</h1>
+        <span>请输入员工编号：</span>
+        <input name="usercode" id="usercode" />
+        <button onClick="btn();" style="cursor:pointer;">查找</button>
+    </div>
+    <br />
+    <div id="show" style="text-align:center;">
+    </div>
+</body>
+<script type="text/javascript">
+    function btn() {
+        var usercode = document.getElementById("usercode").value;//获取我前端输入的值
+
+        //alert(usercode);
+
+        axios.post('http://localhost:8080/findId',
+
+            {
+                "usercode": usercode,//把我前端输入获取的值当做参数跟请求一起发送
+            }
+
+        ).then((res) =>{
+            console.log(res);
+            var d = res.data;//得到后台响应后的数据
+            alert(d.length);
+            if(d.length<1){
+                alert("无此员工信息！");
+            }
+            else {
+                $("#show").html("<table style='width:300px;border:1px solid black;'>" +
+                    "<tr'>" +
+                    "<th style='border:1px solid black;'>员工编号</th>" +
+                    "<th style='border:1px solid black;'>姓名</th>" +
+                    "<th style='border:1px solid black;'>部门</th>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='border:1px solid black;'>" + d[0].userCode + "</td>" +
+                    "<td style='border:1px solid black;'>" + d[0].userName + "</td>" +
+                    "<td style='border:1px solid black;'>" + d[0].department + "</td>" +
+                    "</tr>"
+                    + "</table>");
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+</script>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+</html>
